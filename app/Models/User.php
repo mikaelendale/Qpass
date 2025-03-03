@@ -21,7 +21,8 @@ class User extends Authenticatable
     protected $fillable = [
         'name',
         'email',
-        'password',
+        'workos_id',
+        'avatar',
     ];
 
     /**
@@ -30,9 +31,20 @@ class User extends Authenticatable
      * @var list<string>
      */
     protected $hidden = [
-        'password',
+        'workos_id',
         'remember_token',
     ];
+
+    /**
+     * Get the user's initials.
+     */
+    public function initials(): string
+    {
+        return Str::of($this->name)
+            ->explode(' ')
+            ->map(fn (string $name) => Str::of($name)->substr(0, 1))
+            ->implode('');
+    }
 
     /**
      * Get the attributes that should be cast.
@@ -45,16 +57,5 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
-    }
-
-    /**
-     * Get the user's initials
-     */
-    public function initials(): string
-    {
-        return Str::of($this->name)
-            ->explode(' ')
-            ->map(fn (string $name) => Str::of($name)->substr(0, 1))
-            ->implode('');
     }
 }
